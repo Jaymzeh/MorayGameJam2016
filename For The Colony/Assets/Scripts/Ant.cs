@@ -39,10 +39,10 @@ public class Ant : MonoBehaviour {
 
     void Attack() {
         Transform temp = null;
-        if(enemies.Count>0)
-        temp = GetClosestEnemy(enemies);
+        if (enemies.Count > 0)
+            temp = GetClosestEnemy(enemies);
         else
-        agent.Stop();
+            agent.Stop();
 
         if (temp != null) {
             closestTarget = temp.GetComponent<Ant>();
@@ -51,10 +51,9 @@ public class Ant : MonoBehaviour {
             if (Vector3.Distance(transform.position, closestTarget.transform.position) < 1) {
                 closestTarget.health -= 1;
                 if (team == Team.PLAYER && closestTarget.health <= 0) {
-                    Vector3 pos = transform.forward * -0.5f;
-                    GameControl.SpawnRebel(pos, gameObject);
+                    Instantiate(GameControl.instance.rebelPrefab, closestTarget.transform.position, closestTarget.transform.rotation);
                     Destroy(closestTarget.gameObject);
-                    
+
                 }
             }
         }

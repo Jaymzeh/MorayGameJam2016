@@ -1,24 +1,28 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class GameControl : MonoBehaviour {
 
     public static GameControl instance;
-
     public GameObject rebelPrefab;
 
-    public float Timer {
-        get;private set;
-    }
+
+    public int playerResources = 0;
+    public int enemyResources = 0;
 
     void Awake() {
         instance = this;
     }
 
-	void Start () {
-	
-	}
-	
+	public void ChangeScene(string scene) {
+        SceneManager.LoadScene(scene);
+    }
+
+    public void Exit() {
+        Application.Quit();
+    }
+
     public static void SpawnRebel(Vector3 pos, GameObject _leader) {
         GameObject ant = (GameObject)Instantiate(instance.rebelPrefab, pos, Quaternion.identity);
         ant.GetComponent<Ant>().leader = _leader;
@@ -26,6 +30,16 @@ public class GameControl : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-        Timer += Time.deltaTime;
+        
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if(Physics.Raycast(ray, out hit, Mathf.Infinity)) {
+            if (Input.GetMouseButtonDown(0)){
+                Debug.Log("Target: " + hit.collider.name);
+                if (hit.collider.GetComponent<Queen>() != null)
+                    hit.collider.GetComponent<Queen>().SpawnAnt();
+            }
+        }
 	}
 }

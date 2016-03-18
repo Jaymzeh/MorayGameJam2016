@@ -7,7 +7,6 @@ public class Player : MonoBehaviour {
     NavMeshAgent agent;
 
 	void Start () {
-        agent = GetComponent<NavMeshAgent>();
 	}
 	
 	// Update is called once per frame
@@ -18,11 +17,10 @@ public class Player : MonoBehaviour {
 
         if(Physics.Raycast(ray, out hit, Mathf.Infinity)) {
             if (Input.GetMouseButtonDown(0)){
-                targetPosition = hit.point;
-                Debug.Log("Target changed");
+                Debug.Log("Target: " + hit.collider.name);
             }
         }
-        agent.SetDestination(targetPosition);
+        
         
 	}
 }
