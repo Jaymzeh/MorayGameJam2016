@@ -13,8 +13,8 @@ public class Ant : MonoBehaviour {
 
     NavMeshAgent agent;
 
-    List<Transform> enemies = new List<Transform>();
-    public Ant closestTarget;
+    List<Ant> enemies = new List<Ant>();
+    public float attackRange = 3;
 
 	// Use this for initialization
 	void Start () {
@@ -23,14 +23,14 @@ public class Ant : MonoBehaviour {
 
     public int health = 10;
 
-     Transform GetClosestEnemy(List<Transform> _enemies) {
+     Transform GetClosestEnemy(List<Ant> _enemies) {
         Transform tMin = null;
         float minDist = Mathf.Infinity;
         Vector3 currentPos = transform.position;
-        foreach (Transform t in _enemies) {
-            float dist = Vector3.Distance(t.position, currentPos);
+        foreach (Ant ant in _enemies) {
+            float dist = Vector3.Distance(ant.transform.position, currentPos);
             if (dist < minDist) {
-                tMin = t.transform;
+                tMin = ant.transform;
                 minDist = dist;
             }
         }
@@ -38,58 +38,47 @@ public class Ant : MonoBehaviour {
     }
 
     void Attack() {
-        Transform temp = null;
-        if (enemies.Count > 0)
-            temp = GetClosestEnemy(enemies);
-        else
-            agent.Stop();
+        if (enemies[0] != null) {
+            agent.SetDestination(enemies[0].transform.position);
+            transform.LookAt(enemies[0].transform.position);
 
-        if (temp != null) {
-            closestTarget = temp.GetComponent<Ant>();
-            agent.SetDestination(closestTarget.transform.position);
-
-            if (Vector3.Distance(transform.position, closestTarget.transform.position) < 1) {
-                closestTarget.health -= 1;
-                if (team == Team.PLAYER && closestTarget.health <= 0) {
-                    Instantiate(GameControl.instance.rebelPrefab, closestTarget.transform.position, closestTarget.transform.rotation);
-                    Destroy(closestTarget.gameObject);
-
+            if (Vector3.Distance(transform.position, enemies[0].transform.position) < attackRange) {
+                enemies[0].health -= 1;
+                if (enemies[0].health <= 0) {
+                    if (team == Team.PLAYER)
+                        Instantiate(GameControl.instance.rebelPrefab, enemies[0].transform.position, enemies[0].transform.rotation);
+                    enemies.Remove(enemies[0]);
                 }
             }
         }
+        else
+            agent.Stop();
     }
 
-    void FixedUpdate() {
+    void Update() {
         if (health <= 0)
             Destroy(gameObject);
 
-        enemies = new List<Transform>();
-        Ant[] temp = FindObjectsOfType<Ant>();
-
-        foreach (Ant ant in temp) {
-            if (ant.team != team)
-                enemies.Add(ant.transform);
-        }
-
-        switch (stance) {
-            case Stance.PASSIVE:
-
-                if (leader != null) {
-                    Vector3 pos = leader.transform.position;
-                    agent.SetDestination(pos);
-                }
-                break;
-
-                case Stance.HOSTILE:
-                Attack();
-                break;
-        }
-
+        
+        Attack();
     }
-	void Update () {
+	
 
-        
-        
+    void OnTriggerEnter(Collider other) {
+        if(other.GetComponent<Ant>()!=null && other.GetComponent<Ant>().team != team) {
+            enemies.Add(other.GetComponent<Ant>());
+            
+        }
+    }
 
-	}
+    void OnTriggerExit(Collider other) {
+        if(other.GetComponent<Ant>()!=null && other.GetComponent<Ant>().team != team) {
+            enemies.Remove(other.GetComponent<Ant>());
+        }
+    }
+
+    void OnDrawGizmos() {
+        Gizmos.DrawLine(transform.position, transform.position+ transform.forward*2);
+    }
+
 }
