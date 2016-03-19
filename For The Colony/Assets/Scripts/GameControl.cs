@@ -22,8 +22,27 @@ public class GameControl : MonoBehaviour {
     public GameObject selectionHighlight;
     public GameObject hoverHighlight;
 
+    public bool paused = false;
+    public GameObject pauseScreen;
+
     public GameObject selectedAnt {
         get; set;
+    }
+
+    public void TogglePause() {
+        paused = !paused;
+
+        if (paused) {
+            Time.timeScale = 0;
+            InputEnabled = false;
+            pauseScreen.SetActive(true);
+        }
+        if (!paused) {
+            Time.timeScale = 1;
+            InputEnabled = true;
+            pauseScreen.SetActive(false);
+        }
+
     }
 
     void Awake() {
@@ -60,43 +79,49 @@ public class GameControl : MonoBehaviour {
         ant.GetComponent<Ant>().leader = _leader;
     }
 
-	// Update is called once per frame
-	void Update () {
-        
+    // Update is called once per frame
+    void Update() {
+
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        if(Physics.Raycast(ray, out hit, Mathf.Infinity)) {
-            if (Input.GetMouseButtonDown(0)){
-                Debug.Log("Target: " + hit.collider.name);
-                if (hit.collider.GetComponent<Queen>() != null)
-                    hit.collider.GetComponent<Queen>().SpawnAnt();
-                else
-                if (hit.collider.GetComponent<Ant>() != null && hit.collider.GetComponent<Ant>().team == Ant.Team.PLAYER) {
-                    instance.selectedAnt = hit.collider.gameObject;
-                    
-                }
-                else
-                    instance.selectedAnt = null;
+        if (Input.GetKeyDown(KeyCode.Escape))
+            TogglePause();
 
-            }
-            if (Input.GetMouseButtonDown(1)) {
-                if (instance.selectedAnt != null) {
-                    if (hit.collider.GetComponent<Ant>() != null && hit.collider.GetComponent<Ant>().team == Ant.Team.PLAYER)
-                        selectedAnt.GetComponent<Ant>().leader = hit.collider.gameObject;
+        if (InputEnabled) {
+
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity)) {
+                if (Input.GetMouseButtonDown(0)) {
+                    Debug.Log("Target: " + hit.collider.name);
+                    if (hit.collider.GetComponent<Queen>() != null)
+                        hit.collider.GetComponent<Queen>().SpawnAnt();
                     else
-                        instance.selectedAnt.GetComponent<NavMeshAgent>().SetDestination(hit.point);
+                    if (hit.collider.GetComponent<Ant>() != null && hit.collider.GetComponent<Ant>().team == Ant.Team.PLAYER) {
+                        instance.selectedAnt = hit.collider.gameObject;
 
-                    if (hit.collider.GetComponent<Resource>()!= null) {
-                        selectedAnt.GetComponent<NavMeshAgent>().SetDestination(hit.collider.transform.position);
+                    }
+                    else
+                        instance.selectedAnt = null;
+
+                }
+                if (Input.GetMouseButtonDown(1)) {
+                    if (instance.selectedAnt != null) {
+                        if (hit.collider.GetComponent<Ant>() != null && hit.collider.GetComponent<Ant>().team == Ant.Team.PLAYER)
+                            selectedAnt.GetComponent<Ant>().leader = hit.collider.gameObject;
+                        else
+                            instance.selectedAnt.GetComponent<NavMeshAgent>().SetDestination(hit.point);
+
+                        if (hit.collider.GetComponent<Resource>() != null) {
+                            selectedAnt.GetComponent<NavMeshAgent>().SetDestination(hit.collider.transform.position);
+                        }
                     }
                 }
-            }
 
+            }
+            if (instance.selectedAnt != null)
+                selectionHighlight.transform.position = instance.selectedAnt.transform.position;
+            else
+                selectionHighlight.transform.position = Vector3.zero;
         }
-        if(instance.selectedAnt!=null)
-            selectionHighlight.transform.position = instance.selectedAnt.transform.position;
-        else
-            selectionHighlight.transform.position = Vector3.zero;
-	}
+    }
 }

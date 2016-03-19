@@ -15,6 +15,7 @@ public class Ant : MonoBehaviour {
     Vector2 smoothDeltaPosition = Vector2.zero;
 
     public GameObject enemy;
+    public GameObject queen;
     public Resource resource;
     public int attackStrength = 1;
     public float attackRange = 3;
@@ -62,6 +63,7 @@ public class Ant : MonoBehaviour {
         agent.SetDestination(enemy.transform.position);
         if (Vector3.Distance(transform.position, enemy.transform.position) < attackRange && attackTimer > attackCooldown) {
             enemy.GetComponent<Ant>().health -= attackStrength * Random.Range(1, 3);
+            
             attackTimer = 0;
             if (enemy.GetComponent<Ant>().health <= 0) {
                 if (team == Team.PLAYER) {
@@ -114,6 +116,15 @@ public class Ant : MonoBehaviour {
 
         attackTimer += Time.deltaTime;
 
+        if (queen != null) {
+            agent.SetDestination(queen.transform.position);
+            if (Vector3.Distance(transform.position, queen.transform.position) < attackRange && attackTimer > attackCooldown) {
+                queen.GetComponent<Queen>().health -= attackStrength * Random.Range(1, 3);
+
+                attackTimer = 0;
+            }
+        }
+        else
         if (enemy != null)
             Attack();
         else
@@ -123,6 +134,10 @@ public class Ant : MonoBehaviour {
                 anim.SetBool("Dig", true);
                 CollectResource();
             }
+        }
+        else
+        if (resource == null && anim.GetBool("Dig") == true) {
+            anim.SetBool("Dig", false);
         }
         else
         if (leader != null) {
@@ -137,10 +152,10 @@ public class Ant : MonoBehaviour {
         UpdateSprite();
 
         if (health <= 0) {
-            if(team==Team.PLAYER)
+            if (team == Team.PLAYER)
                 GameControl.instance.allyCount--;
             else
-                if(team==Team.QUEEN)
+                if (team == Team.QUEEN)
                 GameControl.instance.enemyCount--;
             Destroy(gameObject);
         }
@@ -160,6 +175,10 @@ public class Ant : MonoBehaviour {
 
         if (other.GetComponent<Resource>() != null) {
             resource = other.GetComponent<Resource>();
+        }
+
+        if (other.GetComponent<Queen>() != null && other.GetComponent<Queen>().team != team) {
+            queen = other.gameObject;
         }
     }
 

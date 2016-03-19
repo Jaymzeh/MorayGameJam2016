@@ -7,6 +7,7 @@ public class Queen : MonoBehaviour {
     public int antCost = 3;
     public float AIspawnRate = 3;
     public Transform patrol;
+    public int health = 100;
 
     public Ant.Team team;
     float timer = 0;
@@ -25,6 +26,9 @@ public class Queen : MonoBehaviour {
     }
 
     void Update() {
+        if (health <= 0)
+            Destroy(gameObject);
+
         if (team == Ant.Team.QUEEN)
             timer += Time.deltaTime;
         if (GameControl.instance.enemyResources >= antCost && timer >= AIspawnRate) {
