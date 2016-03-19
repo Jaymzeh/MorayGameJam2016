@@ -13,6 +13,11 @@ public class GameControl : MonoBehaviour {
 
     void Awake() {
         instance = this;
+        InputEnabled = true;
+    }
+
+    public bool InputEnabled {
+        get; set;
     }
 
 	public void ChangeScene(string scene) {

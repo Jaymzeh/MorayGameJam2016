@@ -13,9 +13,11 @@ public class Ant : MonoBehaviour {
 
     NavMeshAgent agent;
 
-    List<Ant> enemies = new List<Ant>();
+    Ant enemy;
+    public int attackStrength = 1;
     public float attackRange = 3;
-
+    public float attackCooldown = 1;
+    float timer = 0;
 	// Use this for initialization
 	void Start () {
         agent = GetComponent<NavMeshAgent>();
@@ -38,42 +40,47 @@ public class Ant : MonoBehaviour {
     }
 
     void Attack() {
-        if (enemies[0] != null) {
-            agent.SetDestination(enemies[0].transform.position);
-            transform.LookAt(enemies[0].transform.position);
+        agent.SetDestination(enemy.transform.position);
+        //transform.LookAt(enemy.transform.position);
 
-            if (Vector3.Distance(transform.position, enemies[0].transform.position) < attackRange) {
-                enemies[0].health -= 1;
-                if (enemies[0].health <= 0) {
-                    if (team == Team.PLAYER)
-                        Instantiate(GameControl.instance.rebelPrefab, enemies[0].transform.position, enemies[0].transform.rotation);
-                    enemies.Remove(enemies[0]);
-                }
+        if (Vector3.Distance(transform.position, enemy.transform.position) < attackRange && timer > attackCooldown) {
+
+            enemy.health -= attackStrength * Random.Range(1, 3);
+            timer = 0;
+
+            if (enemy.health <= 0) {
+                if (team == Team.PLAYER)
+                    Instantiate(GameControl.instance.rebelPrefab, enemy.transform.position, enemy.transform.rotation);
+                enemy = null;
+                agent.Stop();
             }
-        }
-        else
-            agent.Stop();
+        }  
     }
 
     void Update() {
-        if (health <= 0)
-            Destroy(gameObject);
+       
+        timer += Time.deltaTime;
 
-        
-        Attack();
+        if (enemy!=null)
+            Attack();
+
+
+         if (health <= 0)
+            Destroy(gameObject);
     }
 	
 
     void OnTriggerEnter(Collider other) {
         if(other.GetComponent<Ant>()!=null && other.GetComponent<Ant>().team != team) {
-            enemies.Add(other.GetComponent<Ant>());
+            if(enemy!= null) {
+                float dst = Vector3.Distance(transform.position, other.transform.position);
+                if(Vector3.Distance(transform.position, enemy.transform.position) < dst) {
+                    enemy = other.GetComponent<Ant>();
+                }
+            }
+            else
+                enemy = other.GetComponent<Ant>();
             
-        }
-    }
-
-    void OnTriggerExit(Collider other) {
-        if(other.GetComponent<Ant>()!=null && other.GetComponent<Ant>().team != team) {
-            enemies.Remove(other.GetComponent<Ant>());
         }
     }
 
