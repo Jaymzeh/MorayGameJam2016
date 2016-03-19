@@ -1,0 +1,13 @@
+E:\Documents\Unity Projects\MorayGameJam2016\For The Colony\Temp\UnityVS_bin\Debug\Assembly-CSharp.dll
+E:\Documents\Unity Projects\MorayGameJam2016\For The Colony\Temp\UnityVS_bin\Debug\Assembly-CSharp.pdb
+E:\Documents\Unity Projects\MorayGameJam2016\For The Colony\Temp\UnityVS_bin\Debug\UnityEditor.dll
+E:\Documents\Unity Projects\MorayGameJam2016\For The Colony\Temp\UnityVS_bin\Debug\UnityEngine.dll
+E:\Documents\Unity Projects\MorayGameJam2016\For The Colony\Temp\UnityVS_bin\Debug\UnityEngine.Networking.dll
+E:\Documents\Unity Projects\MorayGameJam2016\For The Colony\Temp\UnityVS_bin\Debug\UnityEngine.UI.dll
+E:\Documents\Unity Projects\MorayGameJam2016\For The Colony\Temp\UnityVS_bin\Debug\UnityEngine.xml
+E:\Documents\Unity Projects\MorayGameJam2016\For The Colony\Temp\UnityVS_bin\Debug\UnityEngine.UI.xml
+E:\Documents\Unity Projects\MorayGameJam2016\For The Colony\Temp\UnityVS_bin\Debug\UnityEngine.Networking.xml
+E:\Documents\Unity Projects\MorayGameJam2016\For The Colony\Temp\UnityVS_bin\Debug\UnityEditor.xml
+E:\Documents\Unity Projects\MorayGameJam2016\For The Colony\Temp\UnityVS_obj\Debug\For The Colony.CSharp.csprojResolveAssemblyReference.cache
+E:\Documents\Unity Projects\MorayGameJam2016\For The Colony\Temp\UnityVS_obj\Debug\Assembly-CSharp.dll
+E:\Documents\Unity Projects\MorayGameJam2016\For The Colony\Temp\UnityVS_obj\Debug\Assembly-CSharp.pdb

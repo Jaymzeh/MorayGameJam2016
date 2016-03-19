@@ -10,6 +10,9 @@ public class GameControl : MonoBehaviour {
     public int playerResources = 0;
     public int enemyResources = 0;
 
+    public int allyCount;
+    public int enemyCount;
+
     public Transform[] pathParent;
 
     public Transform[] path0;
@@ -78,11 +81,16 @@ public class GameControl : MonoBehaviour {
 
             }
             if (Input.GetMouseButtonDown(1)) {
-                if (instance.selectedAnt != null)
-                    if (hit.collider.GetComponent<Ant>() != null && hit.collider.GetComponent<Ant>().team == Ant.Team.PLAYER) 
+                if (instance.selectedAnt != null) {
+                    if (hit.collider.GetComponent<Ant>() != null && hit.collider.GetComponent<Ant>().team == Ant.Team.PLAYER)
                         selectedAnt.GetComponent<Ant>().leader = hit.collider.gameObject;
-                else
-                    instance.selectedAnt.GetComponent<NavMeshAgent>().SetDestination(hit.point);
+                    else
+                        instance.selectedAnt.GetComponent<NavMeshAgent>().SetDestination(hit.point);
+
+                    if (hit.collider.GetComponent<Resource>()!= null) {
+                        selectedAnt.GetComponent<NavMeshAgent>().SetDestination(hit.collider.transform.position);
+                    }
+                }
             }
 
         }

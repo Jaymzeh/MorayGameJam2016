@@ -15,15 +15,17 @@ public class Ant : MonoBehaviour {
     Vector2 smoothDeltaPosition = Vector2.zero;
 
     public GameObject enemy;
+    public Resource resource;
     public int attackStrength = 1;
     public float attackRange = 3;
     public float attackCooldown = 1;
     float attackTimer = 0;
+    float resourceTimer = 0;
 
+    Animator anim;
 
     void Start() {
         agent = GetComponent<NavMeshAgent>();
-
         if (team != Team.PLAYER) {
             int choosePath = Random.Range(1, 30);
             if (choosePath <= 10)
@@ -36,6 +38,8 @@ public class Ant : MonoBehaviour {
 
             agent.SetDestination(path[0].position);
         }
+
+        anim = GetComponentInChildren<Animator>();
     }
 
     public int health = 10;
@@ -56,16 +60,14 @@ public class Ant : MonoBehaviour {
 
     void Attack() {
         agent.SetDestination(enemy.transform.position);
-
         if (Vector3.Distance(transform.position, enemy.transform.position) < attackRange && attackTimer > attackCooldown) {
-
             enemy.GetComponent<Ant>().health -= attackStrength * Random.Range(1, 3);
             attackTimer = 0;
-
             if (enemy.GetComponent<Ant>().health <= 0) {
                 if (team == Team.PLAYER) {
                     GameObject newAnt = (GameObject)Instantiate(GameControl.instance.rebelPrefab, enemy.transform.position, enemy.transform.rotation);
                     newAnt.GetComponent<Ant>().leader = gameObject;
+                    GameControl.instance.allyCount++;
                 }
                 enemy = null;
                 if (team == Team.PLAYER)
@@ -77,10 +79,7 @@ public class Ant : MonoBehaviour {
     void Patrol() {
         if (Vector3.Distance(transform.position, path[pathIndex].position) < 1) {
             int newIndex = Random.Range(0, path.Length);
-
             pathIndex = newIndex;
-
-            
         }
         agent.SetDestination(path[pathIndex].position);
     }
@@ -94,12 +93,37 @@ public class Ant : MonoBehaviour {
             transform.localScale = new Vector3(1, 1, 1);
     }
 
+    void CollectResource() {
+        resourceTimer += Time.deltaTime;
+        
+        Debug.Log("Resource Timer:" + resourceTimer);
+
+        if (resourceTimer > 5) {
+            if (team == Team.PLAYER)
+                GameControl.instance.playerResources += 10;
+            else
+                GameControl.instance.enemyResources += 10;
+            Destroy(resource.gameObject);
+            resource = null;
+            anim.SetBool("Dig", false);
+        }
+
+    }
+
     void Update() {
 
         attackTimer += Time.deltaTime;
 
         if (enemy != null)
             Attack();
+        else
+        if (resource != null) {
+            agent.SetDestination(resource.transform.position);
+            if (Vector3.Distance(transform.position, resource.transform.position) < 2) {
+                anim.SetBool("Dig", true);
+                CollectResource();
+            }
+        }
         else
         if (leader != null) {
             Vector3 back = leader.transform.position;
@@ -112,10 +136,15 @@ public class Ant : MonoBehaviour {
 
         UpdateSprite();
 
-        if (health <= 0)
+        if (health <= 0) {
+            if(team==Team.PLAYER)
+                GameControl.instance.allyCount--;
+            else
+                if(team==Team.QUEEN)
+                GameControl.instance.enemyCount--;
             Destroy(gameObject);
+        }
     }
-
 
     void OnTriggerEnter(Collider other) {
         if (other.GetComponent<Ant>() != null && other.GetComponent<Ant>().team != team) {
@@ -128,11 +157,15 @@ public class Ant : MonoBehaviour {
             else
                 enemy = other.gameObject;
         }
+
+        if (other.GetComponent<Resource>() != null) {
+            resource = other.GetComponent<Resource>();
+        }
     }
 
     void OnDrawGizmos() {
         Gizmos.DrawLine(transform.position, transform.position + transform.forward * 2);
-        
+        Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 
 }

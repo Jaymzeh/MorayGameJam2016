@@ -16,6 +16,7 @@ public class Queen : MonoBehaviour {
             case Ant.Team.PLAYER:
                 if (GameControl.instance.playerResources >= antCost) {
                     GameObject temp = Instantiate(antPrefab, transform.position, Quaternion.identity) as GameObject;
+                    GameControl.instance.allyCount++;
                     temp.GetComponent<NavMeshAgent>().SetDestination(patrol.position);
                     GameControl.instance.playerResources -= antCost;
                 }
@@ -24,15 +25,13 @@ public class Queen : MonoBehaviour {
     }
 
     void Update() {
-        if(team == Ant.Team.QUEEN)
-             timer += Time.deltaTime;
-                if (GameControl.instance.enemyResources >= antCost && timer >= AIspawnRate) {
-
-
-                    GameObject temp = Instantiate(antPrefab, transform.position, Quaternion.identity) as GameObject;
-                    GameControl.instance.enemyResources -= antCost;
-                    timer = 0;
-
-                }
+        if (team == Ant.Team.QUEEN)
+            timer += Time.deltaTime;
+        if (GameControl.instance.enemyResources >= antCost && timer >= AIspawnRate) {
+            Instantiate(antPrefab, transform.position, Quaternion.identity);
+            GameControl.instance.enemyResources -= antCost;
+            GameControl.instance.enemyCount++;
+            timer = 0;
+        }
     }
 }
