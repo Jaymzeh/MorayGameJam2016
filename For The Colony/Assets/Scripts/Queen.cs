@@ -20,19 +20,6 @@ public class Queen : MonoBehaviour {
                     GameControl.instance.playerResources -= antCost;
                 }
                 break;
-
-            case Ant.Team.QUEEN:
-                timer += Time.deltaTime;
-                if (GameControl.instance.enemyResources >= antCost && timer >= AIspawnRate) {
-
-
-                    GameObject temp = Instantiate(antPrefab, transform.position, Quaternion.identity) as GameObject;
-                    temp.GetComponent<NavMeshAgent>().SetDestination(patrol.position);
-                    GameControl.instance.enemyResources -= antCost;
-                    timer = 0;
-
-                }
-                break;
         }
     }
 
@@ -43,7 +30,6 @@ public class Queen : MonoBehaviour {
 
 
                     GameObject temp = Instantiate(antPrefab, transform.position, Quaternion.identity) as GameObject;
-                    temp.GetComponent<NavMeshAgent>().SetDestination(patrol.position);
                     GameControl.instance.enemyResources -= antCost;
                     timer = 0;
 

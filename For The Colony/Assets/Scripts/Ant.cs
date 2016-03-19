@@ -6,26 +6,41 @@ public class Ant : MonoBehaviour {
     public enum Team { PLAYER, QUEEN, SLAVER };
     public Team team;
 
-    public enum Stance { PASSIVE, HOSTILE };
-    public Stance stance = Stance.PASSIVE;
-
     public GameObject leader;
-
     NavMeshAgent agent;
+
+    public Transform[] path;
+    int pathIndex = 0;
+
+    Vector2 smoothDeltaPosition = Vector2.zero;
 
     Ant enemy;
     public int attackStrength = 1;
     public float attackRange = 3;
     public float attackCooldown = 1;
-    float timer = 0;
-	// Use this for initialization
-	void Start () {
+    float attackTimer = 0;
+
+
+    void Start() {
         agent = GetComponent<NavMeshAgent>();
-	}
+
+        if (team != Team.PLAYER) {
+            int choosePath = Random.Range(1, 30);
+            if (choosePath <= 10)
+                path = GameControl.instance.path0;
+            else
+            if (choosePath <= 20)
+                path = GameControl.instance.path1;
+            else
+                path = GameControl.instance.path2;
+
+            agent.SetDestination(path[0].position);
+        }
+    }
 
     public int health = 10;
 
-     Transform GetClosestEnemy(List<Ant> _enemies) {
+    Transform GetClosestEnemy(List<Ant> _enemies) {
         Transform tMin = null;
         float minDist = Mathf.Infinity;
         Vector3 currentPos = transform.position;
@@ -41,12 +56,11 @@ public class Ant : MonoBehaviour {
 
     void Attack() {
         agent.SetDestination(enemy.transform.position);
-        //transform.LookAt(enemy.transform.position);
 
-        if (Vector3.Distance(transform.position, enemy.transform.position) < attackRange && timer > attackCooldown) {
+        if (Vector3.Distance(transform.position, enemy.transform.position) < attackRange && attackTimer > attackCooldown) {
 
             enemy.health -= attackStrength * Random.Range(1, 3);
-            timer = 0;
+            attackTimer = 0;
 
             if (enemy.health <= 0) {
                 if (team == Team.PLAYER)
@@ -54,38 +68,61 @@ public class Ant : MonoBehaviour {
                 enemy = null;
                 agent.Stop();
             }
-        }  
+        }
+    }
+
+    void Patrol() {
+        if (Vector3.Distance(transform.position, path[pathIndex].position) < 1) {
+            int newIndex = Random.Range(0, path.Length - 1);
+
+            pathIndex = newIndex;
+
+            agent.SetDestination(path[pathIndex].position);
+        }
+    }
+
+    void UpdateSprite() {
+
+        if (agent.destination.x > transform.position.x)
+            transform.localScale = new Vector3(-1, 1, 1);
+        else
+            if (agent.destination.x < transform.position.x)
+            transform.localScale = new Vector3(1, 1, 1);
     }
 
     void Update() {
-       
-        timer += Time.deltaTime;
 
-        if (enemy!=null)
+        attackTimer += Time.deltaTime;
+
+        if (enemy != null)
             Attack();
+        else
+            if (team != Team.PLAYER)
+                Patrol();
 
+        UpdateSprite();
 
-         if (health <= 0)
+        if (health <= 0)
             Destroy(gameObject);
     }
-	
+
 
     void OnTriggerEnter(Collider other) {
-        if(other.GetComponent<Ant>()!=null && other.GetComponent<Ant>().team != team) {
-            if(enemy!= null) {
-                float dst = Vector3.Distance(transform.position, other.transform.position);
-                if(Vector3.Distance(transform.position, enemy.transform.position) < dst) {
+        if (other.GetComponent<Ant>() != null && other.GetComponent<Ant>().team != team) {
+            if (enemy != null) {
+                float dst = Vector3.Distance(transform.position, enemy.transform.position);
+                if (Vector3.Distance(transform.position, other.transform.position) < dst) {
                     enemy = other.GetComponent<Ant>();
                 }
             }
             else
                 enemy = other.GetComponent<Ant>();
-            
+
         }
     }
 
     void OnDrawGizmos() {
-        Gizmos.DrawLine(transform.position, transform.position+ transform.forward*2);
+        Gizmos.DrawLine(transform.position, transform.position + transform.forward * 2);
     }
 
 }
