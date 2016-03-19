@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class Ant : MonoBehaviour {
 
-    public enum Team { PLAYER, QUEEN };
+    public enum Team { PLAYER, QUEEN, SLAVER };
     public Team team;
 
     public enum Stance { PASSIVE, HOSTILE };
