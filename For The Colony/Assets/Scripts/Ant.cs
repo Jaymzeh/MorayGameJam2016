@@ -14,7 +14,7 @@ public class Ant : MonoBehaviour {
 
     Vector2 smoothDeltaPosition = Vector2.zero;
 
-    Ant enemy;
+    public GameObject enemy;
     public int attackStrength = 1;
     public float attackRange = 3;
     public float attackCooldown = 1;
@@ -59,26 +59,30 @@ public class Ant : MonoBehaviour {
 
         if (Vector3.Distance(transform.position, enemy.transform.position) < attackRange && attackTimer > attackCooldown) {
 
-            enemy.health -= attackStrength * Random.Range(1, 3);
+            enemy.GetComponent<Ant>().health -= attackStrength * Random.Range(1, 3);
             attackTimer = 0;
 
-            if (enemy.health <= 0) {
-                if (team == Team.PLAYER)
-                    Instantiate(GameControl.instance.rebelPrefab, enemy.transform.position, enemy.transform.rotation);
+            if (enemy.GetComponent<Ant>().health <= 0) {
+                if (team == Team.PLAYER) {
+                    GameObject newAnt = (GameObject)Instantiate(GameControl.instance.rebelPrefab, enemy.transform.position, enemy.transform.rotation);
+                    newAnt.GetComponent<Ant>().leader = gameObject;
+                }
                 enemy = null;
-                agent.Stop();
+                if (team == Team.PLAYER)
+                    agent.Stop();
             }
         }
     }
 
     void Patrol() {
         if (Vector3.Distance(transform.position, path[pathIndex].position) < 1) {
-            int newIndex = Random.Range(0, path.Length - 1);
+            int newIndex = Random.Range(0, path.Length);
 
             pathIndex = newIndex;
 
-            agent.SetDestination(path[pathIndex].position);
+            
         }
+        agent.SetDestination(path[pathIndex].position);
     }
 
     void UpdateSprite() {
@@ -97,8 +101,14 @@ public class Ant : MonoBehaviour {
         if (enemy != null)
             Attack();
         else
+        if (leader != null) {
+            Vector3 back = leader.transform.position;
+            agent.SetDestination(back);
+        }
+        else
             if (team != Team.PLAYER)
-                Patrol();
+            Patrol();
+
 
         UpdateSprite();
 
@@ -112,17 +122,17 @@ public class Ant : MonoBehaviour {
             if (enemy != null) {
                 float dst = Vector3.Distance(transform.position, enemy.transform.position);
                 if (Vector3.Distance(transform.position, other.transform.position) < dst) {
-                    enemy = other.GetComponent<Ant>();
+                    enemy = other.gameObject;
                 }
             }
             else
-                enemy = other.GetComponent<Ant>();
-
+                enemy = other.gameObject;
         }
     }
 
     void OnDrawGizmos() {
         Gizmos.DrawLine(transform.position, transform.position + transform.forward * 2);
+        
     }
 
 }

@@ -16,6 +16,9 @@ public class GameControl : MonoBehaviour {
     public Transform[] path1;
     public Transform[] path2;
 
+    public GameObject selectionHighlight;
+    public GameObject hoverHighlight;
+
     public GameObject selectedAnt {
         get; set;
     }
@@ -65,10 +68,27 @@ public class GameControl : MonoBehaviour {
                 Debug.Log("Target: " + hit.collider.name);
                 if (hit.collider.GetComponent<Queen>() != null)
                     hit.collider.GetComponent<Queen>().SpawnAnt();
+                else
+                if (hit.collider.GetComponent<Ant>() != null && hit.collider.GetComponent<Ant>().team == Ant.Team.PLAYER) {
+                    instance.selectedAnt = hit.collider.gameObject;
+                    
+                }
+                else
+                    instance.selectedAnt = null;
 
-                if (hit.collider.GetComponent<Ant>() != null && hit.collider.GetComponent<Ant>().team == Ant.Team.PLAYER)
-                    GameControl.instance.selectedAnt = hit.collider.gameObject;
             }
+            if (Input.GetMouseButtonDown(1)) {
+                if (instance.selectedAnt != null)
+                    if (hit.collider.GetComponent<Ant>() != null && hit.collider.GetComponent<Ant>().team == Ant.Team.PLAYER) 
+                        selectedAnt.GetComponent<Ant>().leader = hit.collider.gameObject;
+                else
+                    instance.selectedAnt.GetComponent<NavMeshAgent>().SetDestination(hit.point);
+            }
+
         }
+        if(instance.selectedAnt!=null)
+            selectionHighlight.transform.position = instance.selectedAnt.transform.position;
+        else
+            selectionHighlight.transform.position = Vector3.zero;
 	}
 }

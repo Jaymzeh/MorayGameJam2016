@@ -15,6 +15,8 @@ public class ResourceSpawn : MonoBehaviour {
         if(timer >= spawnRate) {
             int random = Random.Range(0, spawnPoints.Length - 1);
 
+            
+
             Instantiate(resourcePrefab, spawnPoints[random].transform.position, spawnPoints[random].transform.rotation);
             timer = 0;
         }

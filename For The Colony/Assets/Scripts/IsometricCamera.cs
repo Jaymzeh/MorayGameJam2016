@@ -27,10 +27,10 @@ public class IsometricCamera : MonoBehaviour {
     void LateUpdate() {
 
         if (GameControl.instance.InputEnabled) {
-            if (Input.GetMouseButton(1)) {
-                float dx = -Input.GetAxis("Mouse X");
-                transform.Rotate(Vector3.up, dx);
-            }
+            //if (Input.GetMouseButton(1)) {
+            //    float dx = -Input.GetAxis("Mouse X");
+            //    transform.Rotate(Vector3.up, dx);
+            //}
 
             if (Input.GetMouseButton(2)) {
                 float dx = -Input.GetAxis("Mouse X");

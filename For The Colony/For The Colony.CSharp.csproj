@@ -65,10 +65,12 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Ant.cs" />
     <Compile Include="Assets\Scripts\GameControl.cs" />
+    <Compile Include="Assets\Scripts\HUD.cs" />
     <Compile Include="Assets\Scripts\IsometricCamera.cs" />
     <Compile Include="Assets\Scripts\Queen.cs" />
     <Compile Include="Assets\Scripts\Resource.cs" />
     <Compile Include="Assets\Scripts\ResourceSpawn.cs" />
+    <Compile Include="Assets\Scripts\TargetMarker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Standard Assets\ParticleSystems\ParticleSystemsGuidelines.txt" />
