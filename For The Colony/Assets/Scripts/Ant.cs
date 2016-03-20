@@ -24,6 +24,7 @@ public class Ant : MonoBehaviour {
     float resourceTimer = 0;
 
     Animator anim;
+    AudioSource SFX;
 
     void Start() {
         agent = GetComponent<NavMeshAgent>();
@@ -41,6 +42,8 @@ public class Ant : MonoBehaviour {
         }
 
         anim = GetComponentInChildren<Animator>();
+
+        SFX = GameObject.FindGameObjectWithTag("AttackSFX").GetComponent<AudioSource>();
     }
 
     public int health = 10;
@@ -63,6 +66,8 @@ public class Ant : MonoBehaviour {
         agent.SetDestination(enemy.transform.position);
         if (Vector3.Distance(transform.position, enemy.transform.position) < attackRange && attackTimer > attackCooldown) {
             enemy.GetComponent<Ant>().health -= attackStrength * Random.Range(1, 3);
+            if (!SFX.isPlaying)
+                SFX.Play();
             
             attackTimer = 0;
             if (enemy.GetComponent<Ant>().health <= 0) {
@@ -72,8 +77,6 @@ public class Ant : MonoBehaviour {
                     GameControl.instance.allyCount++;
                 }
                 enemy = null;
-                if (team == Team.PLAYER)
-                    agent.Stop();
             }
         }
     }
@@ -120,7 +123,8 @@ public class Ant : MonoBehaviour {
             agent.SetDestination(queen.transform.position);
             if (Vector3.Distance(transform.position, queen.transform.position) < attackRange && attackTimer > attackCooldown) {
                 queen.GetComponent<Queen>().health -= attackStrength * Random.Range(1, 3);
-
+                if (!SFX.isPlaying)
+                    SFX.Play();
                 attackTimer = 0;
             }
         }

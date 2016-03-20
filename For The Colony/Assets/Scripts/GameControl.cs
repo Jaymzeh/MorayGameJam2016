@@ -108,8 +108,10 @@ public class GameControl : MonoBehaviour {
                     if (instance.selectedAnt != null) {
                         if (hit.collider.GetComponent<Ant>() != null && hit.collider.GetComponent<Ant>().team == Ant.Team.PLAYER)
                             selectedAnt.GetComponent<Ant>().leader = hit.collider.gameObject;
-                        else
+                        else {
                             instance.selectedAnt.GetComponent<NavMeshAgent>().SetDestination(hit.point);
+                            selectedAnt.GetComponent<Ant>().leader = null;
+                        }
 
                         if (hit.collider.GetComponent<Resource>() != null) {
                             selectedAnt.GetComponent<NavMeshAgent>().SetDestination(hit.collider.transform.position);
