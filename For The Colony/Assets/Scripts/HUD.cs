@@ -6,6 +6,7 @@ public class HUD : MonoBehaviour {
 
     public Text nameText, healthText, level;
     public Text allyText, enemyText, foodText;
+    public Image portrait;
 
     public int numOfAllies,numOfEnemies;
 
