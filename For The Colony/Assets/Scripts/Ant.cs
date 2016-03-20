@@ -172,15 +172,7 @@ public class Ant : MonoBehaviour {
         }
     }
 
-    void FixedUpdate() {
-        GameObject[] queens = GameObject.FindGameObjectsWithTag("Queen");
-        if (queens.Length < 2) {
-            if(queens[0].GetComponent<Queen>().team == Ant.Team.PLAYER) {
-
-            }
-        }
-
-    }
+    
 
     void OnTriggerEnter(Collider other) {
         if (other.GetComponent<Ant>() != null && other.GetComponent<Ant>().team != team) {

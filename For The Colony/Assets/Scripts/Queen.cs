@@ -26,16 +26,36 @@ public class Queen : MonoBehaviour {
     }
 
     void Update() {
-        if (health <= 0)
+        if (health <= 0) {
+            if (team == Ant.Team.PLAYER)
+                GameControl.instance.ShowGameOver();
             Destroy(gameObject);
+        }
 
-        if (team == Ant.Team.QUEEN)
+        if (team != Ant.Team.PLAYER) {
             timer += Time.deltaTime;
-        if (GameControl.instance.enemyResources >= antCost && timer >= AIspawnRate) {
-            Instantiate(antPrefab, transform.position, Quaternion.identity);
-            GameControl.instance.enemyResources -= antCost;
-            GameControl.instance.enemyCount++;
-            timer = 0;
+
+            if (team == Ant.Team.QUEEN) {
+                if (GameControl.instance.enemyResources >= antCost && timer >= AIspawnRate) {
+                    Instantiate(antPrefab, transform.position, Quaternion.identity);
+                    GameControl.instance.enemyResources -= antCost;
+                    GameControl.instance.enemyCount++;
+                    timer = 0;
+                }
+            }
+            else
+            if (team == Ant.Team.SLAVER) {
+                if (GameControl.instance.slaverResources != 1) {
+                    if (GameControl.instance.slaverResources >= antCost && timer >= AIspawnRate) {
+                        Instantiate(antPrefab, transform.position, Quaternion.identity);
+                        GameControl.instance.slaverResources -= antCost;
+                        GameControl.instance.enemyCount++;
+                        timer = 0;
+                    }
+                }
+                else
+                    Destroy(gameObject);
+            }
         }
     }
 }

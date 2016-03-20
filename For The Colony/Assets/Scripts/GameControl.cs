@@ -26,7 +26,12 @@ public class GameControl : MonoBehaviour {
     public bool paused = false;
     public GameObject pauseScreen;
 
+    public float slaverSpawnTime;
+    float slaverCoutndown = 0;
+
     public GameObject gameWinScreen, gameLoseScreen;
+
+    public GameObject playerQueen, redQueen, slaverSpawn;
 
     public GameObject selectedAnt {
         get; set;
@@ -52,17 +57,17 @@ public class GameControl : MonoBehaviour {
         instance = this;
         InputEnabled = true;
 
-        if (pathParent != null)
+        if (pathParent.Length > 0)
             for (int i = 0; i < pathParent[0].childCount; i++) {
                 path0[i] = pathParent[0].GetChild(i).transform;
             }
 
-        if (pathParent != null)
+        if (pathParent.Length > 0)
             for (int i = 0; i < pathParent[1].childCount; i++) {
                 path1[i] = pathParent[1].GetChild(i).transform;
             }
 
-        if (pathParent != null)
+        if (pathParent.Length > 0)
             for (int i = 0; i < pathParent[2].childCount; i++) {
                 path2[i] = pathParent[2].GetChild(i).transform;
             }
@@ -103,28 +108,35 @@ public class GameControl : MonoBehaviour {
                         hit.collider.GetComponent<Queen>().SpawnAnt();
                     else
                     if (hit.collider.GetComponent<Ant>() != null && hit.collider.GetComponent<Ant>().team == Ant.Team.PLAYER) {
-                        instance.selectedAnt = hit.collider.gameObject;
-
+                        if (instance.selectedAnt == null) {
+                            instance.selectedAnt = hit.collider.gameObject;
+                        }
+                        else {
+                            hit.collider.GetComponent<Ant>().leader = selectedAnt;
+                        }
                     }
                     else
-                        instance.selectedAnt = null;
+                        if (instance.selectedAnt != null)
+                        instance.selectedAnt.GetComponent<NavMeshAgent>().SetDestination(hit.point);
+
 
                 }
                 if (Input.GetMouseButtonDown(1)) {
-                    if (instance.selectedAnt != null) {
-                        if (hit.collider.GetComponent<Ant>() != null && hit.collider.GetComponent<Ant>().team == Ant.Team.PLAYER)
-                            selectedAnt.GetComponent<Ant>().leader = hit.collider.gameObject;
-                        else {
-                            instance.selectedAnt.GetComponent<NavMeshAgent>().SetDestination(hit.point);
-                            if (selectedAnt.GetComponent<Ant>().leader != null)
-                                selectedAnt.GetComponent<Ant>().leader.GetComponentInChildren<SpriteRenderer>().color = new Color(1, 1, 1);
-                            selectedAnt.GetComponent<Ant>().leader = null;
-                        }
+                    instance.selectedAnt = null;
+                //    if (instance.selectedAnt != null) {
+                //        if (hit.collider.GetComponent<Ant>() != null && hit.collider.GetComponent<Ant>().team == Ant.Team.PLAYER)
+                //            selectedAnt.GetComponent<Ant>().leader = hit.collider.gameObject;
+                //        else {
+                //            instance.selectedAnt.GetComponent<NavMeshAgent>().SetDestination(hit.point);
+                //            if (selectedAnt.GetComponent<Ant>().leader != null)
+                //                selectedAnt.GetComponent<Ant>().leader.GetComponentInChildren<SpriteRenderer>().color = new Color(1, 1, 1);
+                //            selectedAnt.GetComponent<Ant>().leader = null;
+                //        }
 
-                        if (hit.collider.GetComponent<Resource>() != null) {
-                            selectedAnt.GetComponent<NavMeshAgent>().SetDestination(hit.collider.transform.position);
-                        }
-                    }
+                //        if (hit.collider.GetComponent<Resource>() != null) {
+                //            selectedAnt.GetComponent<NavMeshAgent>().SetDestination(hit.collider.transform.position);
+                //        }
+                //    }
                 }
 
             }
@@ -132,18 +144,37 @@ public class GameControl : MonoBehaviour {
                 selectionHighlight.transform.position = instance.selectedAnt.transform.position;
             else
                 if (selectionHighlight != null)
-                    selectionHighlight.transform.position = Vector3.zero;
+                selectionHighlight.transform.position = Vector3.zero;
         }
+
+
+
+        if (slaverCoutndown < slaverSpawnTime) {
+            slaverCoutndown += Time.deltaTime;
+        }
+        if (slaverCoutndown > slaverSpawnTime) {
+            slaverResources = 31;
+            slaverCoutndown = slaverSpawnTime;
+        }
+
     }
 
+    public void ShowGameOver() {
+        gameLoseScreen.SetActive(true);
+    }
     void FixedUpdate() {
-        GameObject[] queens = GameObject.FindGameObjectsWithTag("Queen");
-        if (queens.Length < 2) {
-            if (queens[0].GetComponent<Queen>().team == Ant.Team.PLAYER) {
-                gameWinScreen.SetActive(true);
-            }
-            else
+
+        if (slaverSpawn == null)
+            return;
+
+        if (playerQueen != null && redQueen == null && enemyCount == 0)
+            gameWinScreen.SetActive(true);
+        else {
+            if (playerQueen == null) {
                 gameLoseScreen.SetActive(true);
             }
         }
+    }
+
+
 }

@@ -13,9 +13,9 @@ public class HUD : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         if (GameControl.instance.selectedAnt != null) {
-            nameText.text = GameControl.instance.selectedAnt.name;
+            nameText.text = "Name: " + GameControl.instance.selectedAnt.name;
             portrait.color = new Color(1, 1, 1, 1);
-            healthText.text = GameControl.instance.selectedAnt.GetComponent<Ant>().health.ToString();
+            healthText.text = "Health: " + GameControl.instance.selectedAnt.GetComponent<Ant>().health.ToString();
             portrait.sprite = GameControl.instance.selectedAnt.GetComponent<Ant>().portrait;
         }
         else {

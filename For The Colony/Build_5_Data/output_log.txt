@@ -1,0 +1,72 @@
+Mono path[0] = 'E:/Documents/Unity Projects/MorayGameJam2016/For The Colony/Build_5_Data/Managed'
+Mono path[1] = 'E:/Documents/Unity Projects/MorayGameJam2016/For The Colony/Build_5_Data/Mono'
+Mono config path = 'E:/Documents/Unity Projects/MorayGameJam2016/For The Colony/Build_5_Data/Mono/etc'
+PlayerConnection initialized from E:/Documents/Unity Projects/MorayGameJam2016/For The Colony/Build_5_Data (debug = 0)
+PlayerConnection initialized network socket : 0.0.0.0 55270
+Multi-casting "[IP] 10.0.0.41 [Port] 55270 [Flags] 2 [Guid] 3404922252 [EditorId] 3524992581 [Version] 1048832 [Id] WindowsPlayer(James) [Debug] 0" to [225.0.0.222:54997]...
+PlayerConnection already initialized - listening to [10.0.0.41:55270]
+Initialize engine version: 5.3.4f1 (fdbb5133b820)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: NVIDIA GeForce GTX 970 (ID=0x13c2)
+    Vendor:   NVIDIA
+    VRAM:     3072 MB
+Begin MonoManager ReloadAssembly
+Platform assembly: E:\Documents\Unity Projects\MorayGameJam2016\For The Colony\Build_5_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading E:\Documents\Unity Projects\MorayGameJam2016\For The Colony\Build_5_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: E:\Documents\Unity Projects\MorayGameJam2016\For The Colony\Build_5_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading E:\Documents\Unity Projects\MorayGameJam2016\For The Colony\Build_5_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: E:\Documents\Unity Projects\MorayGameJam2016\For The Colony\Build_5_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading E:\Documents\Unity Projects\MorayGameJam2016\For The Colony\Build_5_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: E:\Documents\Unity Projects\MorayGameJam2016\For The Colony\Build_5_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading E:\Documents\Unity Projects\MorayGameJam2016\For The Colony\Build_5_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+- Completed reload, in  0.119 seconds
+Platform assembly: E:\Documents\Unity Projects\MorayGameJam2016\For The Colony\Build_5_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: E:\Documents\Unity Projects\MorayGameJam2016\For The Colony\Build_5_Data\Managed\System.dll (this message is harmless)
+desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
+<RI> Initializing input.
+<RI> Input initialized.
+<RI> Initialized touch support.
+UnloadTime: 0.859905 ms
+Setting up 2 worker threads for Enlighten.
+  Thread -> id: 3b28 -> priority: 1 
+  Thread -> id: 3b24 -> priority: 1 
+Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 6.949518 ms
+System memory in use before: 15.9 MB.
+System memory in use after: 15.9 MB.
+
+Unloading 9 unused Assets to reduce memory usage. Loaded Objects now: 237.
+Total: 0.260391 ms (FindLiveObjects: 0.014871 ms CreateObjectMapping: 0.021286 ms MarkObjects: 0.202656 ms  DeleteObjects: 0.012830 ms)
+
+IndexOutOfRangeException: Array index is out of range.
+  at Tutorial.Update () [0x00089] in E:\Documents\Unity Projects\MorayGameJam2016\For The Colony\Assets\Scripts\Tutorial.cs:30 
+ 
+(Filename: E:/Documents/Unity Projects/MorayGameJam2016/For The Colony/Assets/Scripts/Tutorial.cs Line: 30)
+
+Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.506495 ms
+System memory in use before: 52.9 MB.
+System memory in use after: 52.9 MB.
+
+Unloading 7 unused Assets to reduce memory usage. Loaded Objects now: 584.
+Total: 0.423975 ms (FindLiveObjects: 0.037906 ms CreateObjectMapping: 0.021869 ms MarkObjects: 0.346120 ms  DeleteObjects: 0.016620 ms)
+
+Target: BG-PLANE
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+GameControl:Update() (at E:\Documents\Unity Projects\MorayGameJam2016\For The Colony\Assets\Scripts\GameControl.cs:106)
+ 
+(Filename: E:/Documents/Unity Projects/MorayGameJam2016/For The Colony/Assets/Scripts/GameControl.cs Line: 106)
+
+Unloading 2 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.899853 ms
+System memory in use before: 53.0 MB.
+System memory in use after: 52.9 MB.
+
+Unloading 141 unused Assets to reduce memory usage. Loaded Objects now: 225.
+Total: 0.737145 ms (FindLiveObjects: 0.026534 ms CreateObjectMapping: 0.017495 ms MarkObjects: 0.221318 ms  DeleteObjects: 0.469463 ms)
+
