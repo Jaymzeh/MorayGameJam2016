@@ -14,11 +14,14 @@ public class HUD : MonoBehaviour {
 	void Update () {
         if (GameControl.instance.selectedAnt != null) {
             nameText.text = GameControl.instance.selectedAnt.name;
+            portrait.color = new Color(1, 1, 1, 1);
             healthText.text = GameControl.instance.selectedAnt.GetComponent<Ant>().health.ToString();
+            portrait.sprite = GameControl.instance.selectedAnt.GetComponent<Ant>().portrait;
         }
         else {
             nameText.text = "";
             healthText.text = "";
+            portrait.color = new Color(1,1,1,0);
         }
 
         allyText.text = "Allies: " + GameControl.instance.allyCount;

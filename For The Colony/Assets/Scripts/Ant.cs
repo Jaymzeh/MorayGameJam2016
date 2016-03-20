@@ -23,6 +23,9 @@ public class Ant : MonoBehaviour {
     float attackTimer = 0;
     float resourceTimer = 0;
 
+    public Sprite portrait;
+    SpriteRenderer sprite;
+
     Animator anim;
     AudioSource SFX;
 
@@ -44,6 +47,11 @@ public class Ant : MonoBehaviour {
         anim = GetComponentInChildren<Animator>();
 
         SFX = GameObject.FindGameObjectWithTag("AttackSFX").GetComponent<AudioSource>();
+
+        if (team == Team.PLAYER) {
+            gameObject.name = GetComponent<AntProfile>().GetName();
+            portrait = GetComponent<Ant>().portrait = GetComponent<AntProfile>().GetPortait();
+        }
     }
 
     public int health = 10;
@@ -72,9 +80,11 @@ public class Ant : MonoBehaviour {
             attackTimer = 0;
             if (enemy.GetComponent<Ant>().health <= 0) {
                 if (team == Team.PLAYER) {
-                    GameObject newAnt = (GameObject)Instantiate(GameControl.instance.rebelPrefab, enemy.transform.position, enemy.transform.rotation);
-                    newAnt.GetComponent<Ant>().leader = gameObject;
-                    GameControl.instance.allyCount++;
+                    if (Random.Range(1, 10) < 5) {
+                        GameObject newAnt = (GameObject)Instantiate(GameControl.instance.rebelPrefab, enemy.transform.position, enemy.transform.rotation);
+                        newAnt.GetComponent<Ant>().leader = gameObject;
+                        GameControl.instance.allyCount++;
+                    }
                 }
                 enemy = null;
             }
@@ -91,17 +101,14 @@ public class Ant : MonoBehaviour {
 
     void UpdateSprite() {
 
-        if (agent.destination.x > transform.position.x)
-            transform.localScale = new Vector3(-1, 1, 1);
-        else
-            if (agent.destination.x < transform.position.x)
-            transform.localScale = new Vector3(1, 1, 1);
+        if (leader != null) {
+            leader.GetComponentInChildren<SpriteRenderer>().color = new Color(0.5f, 0.5f, 0.5f);
+        }
+        
     }
 
     void CollectResource() {
         resourceTimer += Time.deltaTime;
-        
-        Debug.Log("Resource Timer:" + resourceTimer);
 
         if (resourceTimer > 5) {
             if (team == Team.PLAYER)
@@ -163,6 +170,16 @@ public class Ant : MonoBehaviour {
                 GameControl.instance.enemyCount--;
             Destroy(gameObject);
         }
+    }
+
+    void FixedUpdate() {
+        GameObject[] queens = GameObject.FindGameObjectsWithTag("Queen");
+        if (queens.Length < 2) {
+            if(queens[0].GetComponent<Queen>().team == Ant.Team.PLAYER) {
+
+            }
+        }
+
     }
 
     void OnTriggerEnter(Collider other) {

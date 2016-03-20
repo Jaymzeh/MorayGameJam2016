@@ -8,8 +8,8 @@ public class AntProfile : MonoBehaviour {
         "Atticus", "Ava", "Declan", "Isla", "Oliver",
         "Arabella", "SilasAurora", "Levi", "Adeline", "Milo",
         "Eleanor", "Jack", "Penelope", "Jasper", "Isabella",
-        "Elijah", "Astrid,	Leo", "Mia", "Henry",
-        "Violet,	Wyatt", "Aria", "Ethan", "Rose",
+        "Elijah", "Astrid",	"Leo", "Mia", "Henry",
+        "Violet", "Wyatt", "Aria", "Ethan", "Rose",
         "Liam", "Thea", "Caleb", "Cora", "Eli",
         "Alice", "Sebastian", "Claire", "Theodore", "Emma",
         "Benjamin", "Hazel", "Oscar", "Nora", "Austin",
@@ -21,18 +21,19 @@ public class AntProfile : MonoBehaviour {
         "Jacob", "Chloe", "Bodhi", "Emily", "Aryan",
         "Maeve", "Isaac", "Evelyn", "Lucas", "Luna",
         "Soren", "Nova", "Julian", "Adelaide", "Xavier",
-        "Ivy", "John", "Caroline", "Matthew,Elise",
-        "Samuel,Aurelia,	Jude", "Stella", "Roman",
+        "Ivy", "John", "Caroline", "Matthew", "Elise",
+        "Samuel", "Aurelia", "Jude", "Stella", "Roman",
         "Eloise",	"Kai", "Anouk", "Owen", "Ophelia",
-        "Nathaniel"
+        "Nathaniel", "Connor", "Lorna", "Kevin", "Calum",
+        "Robert", "Jonathan"
     };
 
-    public Image[] portrait;
+    public Sprite[] portrait;
 
 	public string GetName() {
         return name[Random.Range(0, name.Length)];
     }
-    public void GetPortait() {
-        
+    public Sprite GetPortait() {
+        return portrait[Random.Range(0, portrait.Length)];
     }
 }

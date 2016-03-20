@@ -26,6 +26,8 @@ public class IsometricCamera : MonoBehaviour {
     */
     void LateUpdate() {
 
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, -20, 20), transform.position.y, Mathf.Clamp(transform.position.z, -20, 20));
+
         if (GameControl.instance.InputEnabled) {
             //if (Input.GetMouseButton(1)) {
             //    float dx = -Input.GetAxis("Mouse X");
@@ -54,6 +56,7 @@ public class IsometricCamera : MonoBehaviour {
             if (zoomSpeed != 0 && !Camera.orthographic) {
                 transform.Translate(Camera.transform.forward * zoomSpeed, Space.World);
             }
+            
 
             if (Input.GetKey("q"))
                 transform.Rotate(Vector3.up, -rotateSpeed);
