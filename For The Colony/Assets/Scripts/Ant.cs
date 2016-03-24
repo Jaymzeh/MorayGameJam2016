@@ -166,7 +166,6 @@ public class Ant : MonoBehaviour {
             if (team == Team.PLAYER)
                 GameControl.instance.allyCount--;
             else
-                if (team == Team.QUEEN)
                 GameControl.instance.enemyCount--;
             Destroy(gameObject);
         }

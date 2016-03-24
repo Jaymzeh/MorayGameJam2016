@@ -112,31 +112,20 @@ public class GameControl : MonoBehaviour {
                             instance.selectedAnt = hit.collider.gameObject;
                         }
                         else {
-                            hit.collider.GetComponent<Ant>().leader = selectedAnt;
+                            if (hit.collider.GetComponent<Ant>() != selectedAnt.GetComponent<Ant>())
+                                hit.collider.GetComponent<Ant>().leader = selectedAnt;
                         }
                     }
                     else
-                        if (instance.selectedAnt != null)
+                        if (instance.selectedAnt != null) {
                         instance.selectedAnt.GetComponent<NavMeshAgent>().SetDestination(hit.point);
+                        selectedAnt.GetComponent<Ant>().leader = null;
+                    }
 
 
                 }
                 if (Input.GetMouseButtonDown(1)) {
                     instance.selectedAnt = null;
-                //    if (instance.selectedAnt != null) {
-                //        if (hit.collider.GetComponent<Ant>() != null && hit.collider.GetComponent<Ant>().team == Ant.Team.PLAYER)
-                //            selectedAnt.GetComponent<Ant>().leader = hit.collider.gameObject;
-                //        else {
-                //            instance.selectedAnt.GetComponent<NavMeshAgent>().SetDestination(hit.point);
-                //            if (selectedAnt.GetComponent<Ant>().leader != null)
-                //                selectedAnt.GetComponent<Ant>().leader.GetComponentInChildren<SpriteRenderer>().color = new Color(1, 1, 1);
-                //            selectedAnt.GetComponent<Ant>().leader = null;
-                //        }
-
-                //        if (hit.collider.GetComponent<Resource>() != null) {
-                //            selectedAnt.GetComponent<NavMeshAgent>().SetDestination(hit.collider.transform.position);
-                //        }
-                //    }
                 }
 
             }
@@ -153,7 +142,7 @@ public class GameControl : MonoBehaviour {
             slaverCoutndown += Time.deltaTime;
         }
         if (slaverCoutndown > slaverSpawnTime) {
-            slaverResources = 31;
+            slaverResources = 30;
             slaverCoutndown = slaverSpawnTime;
         }
 
